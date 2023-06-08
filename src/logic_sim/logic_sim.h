@@ -6,6 +6,7 @@
 #include "../main.h"
 
 #define MAX_CHILDREN 8
+#define SIMCOMPLIST_INITIAL_SIZE 256
 
 typedef enum {
     SC_BUFF = 0,
@@ -32,7 +33,7 @@ typedef struct {
 
 typedef struct {
     size_t count;
-    SimOutConn as[MAX_CHILDREN];
+    SimOutConn data[MAX_CHILDREN];
 } SimOutConnArray;
 
 typedef struct SimComp {
@@ -41,19 +42,29 @@ typedef struct SimComp {
     SimInConn b;
     SimOutConnArray children;
     unsigned int eval_count;
-    bool is_freeing;
 } SimComp;
 
-#define SCONN(c, p) (SimOutConn) { .comp = (c), .pin = (p) }
+typedef struct {
+    size_t count;
+    size_t capacity;
+    SimComp* data;
+} SimCompList;
+
+#define S_Conn(c, p) (SimOutConn) { .comp = (c), .pin = (p) }
+#define S_Comp(k) (SimComp) { .kind = (k), .a = {0}, .b = {0}, .children = {0}, .eval_count = 0 }
 
 size_t SimOCA_add(SimOutConnArray* self, SimOutConn conn);
 void SimOCA_remove(SimOutConnArray* self, size_t item_i);
 
-SimComp* SimComp_alloc();
-void SimComp_free(SimComp* self, bool recursive_call);
-SimComp* SimComp_append(SimComp* self, SimCompKind oc_kind, SimCompPinKind pin);
-void SimComp_add_as_child(SimComp* self, SimOutConn conn);
+void SimComp_inject(SimComp* self, SimOutConn conn);
+void SimComp_eject(SimComp* self);
 void SimComp_eval(SimComp* self, unsigned int eval_count);
+
+SimCompList SimCompList_alloc();
+void SimCompList_free(SimCompList* self);
+void SimCompList_add(SimCompList* self, SimComp item);
+void SimCompList_remove(SimCompList* self, size_t index);
+void SimCompList_eval_all(SimCompList* self, unsigned int eval_count);
 
 void Logic_Sim_draw(GlobalState* global_state);
 

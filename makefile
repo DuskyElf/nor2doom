@@ -1,5 +1,5 @@
 CC = clang
-CFLAGS = -Wall -Wextra -Wpedantic
+CFLAGS = -ggdb -Wall -Wextra -Wpedantic
 STATIC_LIBS = ./lib/libraylib.o
 CLIBS = -lm
 
