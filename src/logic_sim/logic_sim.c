@@ -155,6 +155,7 @@ void SimCompList_eval_all(SimCompList* self, unsigned int eval_count) {
 
 void SimCompList_remove(SimCompList* self, size_t index) {
     assert(index < self->count);
+    SimComp_eject(&self->data[index]);
     memmove(self->data + index, self->data + index + 1, self->count - index - 1);
     --self->count;
 }

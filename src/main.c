@@ -11,15 +11,6 @@ int main(void) {
     };
 
     SimCompList sim_comp_list = SimCompList_alloc();
-    SimCompList_add(&sim_comp_list, S_Comp(SC_NOT));
-    SimCompList_add(&sim_comp_list, S_Comp(SC_BUFF));
-    SimCompList_add(&sim_comp_list, S_Comp(SC_AND));
-    SimCompList_add(&sim_comp_list, S_Comp(SC_BUFF));
-
-    SimComp_inject(&sim_comp_list.data[0], S_Conn(&sim_comp_list.data[0], SC_IN_A));
-    SimComp_inject(&sim_comp_list.data[0], S_Conn(&sim_comp_list.data[2], SC_IN_A));
-    SimComp_inject(&sim_comp_list.data[1], S_Conn(&sim_comp_list.data[2], SC_IN_B));
-    SimComp_inject(&sim_comp_list.data[2], S_Conn(&sim_comp_list.data[3], SC_IN_A));
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(global_state.screen_width, global_state.screen_height, "Nor2Doom");
