@@ -22,7 +22,7 @@ build/logic_sim.o: build/logic_sim/logic_sim.o build/logic_sim/editor.o
 build/logic_sim/logic_sim.o: src/logic_sim/logic_sim.c
 	mkdir -p build/logic_sim
 	$(CC) $(CFLAGS) -c $^ -o $@
-src/logic_sim/logic_sim.c: src/logic_sim/logic_sim.h
+src/logic_sim/logic_sim.c: src/logic_sim/logic_sim.h src/logic_sim/editor.h
 	touch $@
 src/logic_sim/logic_sim.h: src/main.h
 	touch $@
@@ -30,6 +30,8 @@ src/logic_sim/logic_sim.h: src/main.h
 build/logic_sim/editor.o: src/logic_sim/editor.c
 	$(CC) $(CFLAGS) -c $^ -o $@
 src/logic_sim/editor.c: src/logic_sim/editor.h
+	touch $@
+src/logic_sim/editor.h: src/logic_sim/logic_sim.h src/main.h
 	touch $@
 
 clean: 

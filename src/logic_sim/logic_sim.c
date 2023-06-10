@@ -1,4 +1,3 @@
-#include <raylib.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -6,6 +5,29 @@
 #include <assert.h>
 
 #include "./logic_sim.h"
+#include "./editor.h"
+
+const char* SimCompKind_text(SimCompKind self) {
+    char* text;
+    switch (self) {
+        case SC_BUFF:
+            text = "Buff";
+            break;
+        case SC_NOT:
+            text = "Not";
+            break;
+        case SC_OR:
+            text = "Or";
+            break;
+        case SC_AND:
+            text = "And";
+            break;
+        default:
+            assert(0 && "Unreachable");
+    }
+    
+    return text;
+}
 
 size_t SimOCA_add(SimOutConnArray* self, SimOutConn conn) {
     assert(self->count < MAX_CHILDREN);
@@ -104,6 +126,20 @@ void SimComp_eval(SimComp* self, unsigned int eval_count) {
     }
 }
 
+bool SimCompKind_is_binary(const SimCompKind kind) {
+    switch (kind) {
+        case SC_BUFF:
+            return false;
+        case SC_NOT:
+            return false;
+        case SC_OR:
+            return true;
+        case SC_AND:
+            return true;
+    }
+    assert(0 && "Unreachable");
+}
+
 SimCompList SimCompList_alloc() {
     SimComp* alloc = malloc(SIMCOMPLIST_INITIAL_SIZE * sizeof(SimComp));
     if (!alloc) {
@@ -160,15 +196,14 @@ void SimCompList_remove(SimCompList* self, size_t index) {
     --self->count;
 }
 
-const Color BACKGROUND_COLOR = CLITERAL(Color){ 0x19, 0x18, 0x25, 0xFF };
-const Color TITLE_COLOR = CLITERAL(Color){ 0xE3, 0x84, 0xFF, 0xFF };
-
-void Logic_Sim_draw(GlobalState* global_state) {
-    ClearBackground(BACKGROUND_COLOR);
+void Logic_Sim_draw(SimCompList comp_list, GlobalState global_state) {
+    ClearBackground(MY_COLOR_1);
     DrawText(
         "Logic Simulator",
-        100, 100,
-        global_state->font_size,
-        TITLE_COLOR
+        4 * global_state.gui_scale,
+        4 * global_state.gui_scale,
+        8 * global_state.gui_scale,
+        MY_COLOR_2
     );
+    Editor_draw_comps(comp_list, global_state);
 }

@@ -1,6 +1,7 @@
 #ifndef _LOGIC_SIM_H
 #define _LOGIC_SIM_H 
 
+#include <raylib.h>
 #include <stddef.h>
 
 #include "../main.h"
@@ -37,8 +38,8 @@ typedef struct {
 } SimOutConnArray;
 
 typedef struct SimComp {
-    SimCompKind kind;
-    SimInConn a;
+    Vector2 position;
+    SimCompKind kind; SimInConn a;
     SimInConn b;
     SimOutConnArray children;
     unsigned int eval_count;
@@ -53,6 +54,8 @@ typedef struct {
 #define S_Conn(c, p) (SimOutConn) { .comp = (c), .pin = (p) }
 #define S_Comp(k) (SimComp) { .kind = (k), .a = {0}, .b = {0}, .children = {0}, .eval_count = 0 }
 
+const char* SimCompKind_text(SimCompKind self);
+
 size_t SimOCA_add(SimOutConnArray* self, SimOutConn conn);
 void SimOCA_remove(SimOutConnArray* self, size_t item_i);
 
@@ -60,12 +63,14 @@ void SimComp_inject(SimComp* self, SimOutConn conn);
 void SimComp_eject(SimComp* self);
 void SimComp_eval(SimComp* self, unsigned int eval_count);
 
+bool SimCompKind_is_binary(const SimCompKind kind);
+
 SimCompList SimCompList_alloc();
 void SimCompList_free(SimCompList* self);
 void SimCompList_add(SimCompList* self, SimComp item);
 void SimCompList_remove(SimCompList* self, size_t index);
 void SimCompList_eval_all(SimCompList* self, unsigned int eval_count);
 
-void Logic_Sim_draw(GlobalState* global_state);
+void Logic_Sim_draw(SimCompList comp_list, GlobalState global_state);
 
 #endif // !_LOGIC_SIM_H
