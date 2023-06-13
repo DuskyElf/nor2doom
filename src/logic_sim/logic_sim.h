@@ -39,7 +39,8 @@ typedef struct {
 
 typedef struct SimComp {
     Vector2 position;
-    SimCompKind kind; SimInConn a;
+    SimCompKind kind;
+    SimInConn a;
     SimInConn b;
     SimOutConnArray children;
     unsigned int eval_count;
