@@ -29,7 +29,7 @@ int main(void) {
     SimComp_inject(&sim_comp_list.data[4], S_Conn(&sim_comp_list.data[6], SC_IN_A));
     SimComp_inject(&sim_comp_list.data[5], S_Conn(&sim_comp_list.data[6], SC_IN_B));
     SimComp_inject(&sim_comp_list.data[6], S_Conn(&sim_comp_list.data[7], SC_IN_A));
-    //SimComp_inject(&sim_comp_list.data[7], S_Conn(&sim_comp_list.data[1], SC_IN_A));
+    SimComp_inject(&sim_comp_list.data[7], S_Conn(&sim_comp_list.data[1], SC_IN_A));
 
     sim_comp_list.data[0].position = CLITERAL(Vector2) { 300, 300 };
     sim_comp_list.data[1].position = CLITERAL(Vector2) { 300, 500 };
@@ -54,17 +54,17 @@ int main(void) {
         global_state.screen_width = GetScreenWidth();
         global_state.screen_height = GetScreenHeight();
 
-        if (eval_count % 50 == 0) {
-            if (a) {
-                a = 0;
-                b = !b;
-            } else {
-                a = 1;
-            }
-        }
-        
-        sim_comp_list.data[0].a.value = a;
-        sim_comp_list.data[1].a.value = b;
+        // if (eval_count % 50 == 0) {
+        //     if (a) {
+        //         a = 0;
+        //         b = !b;
+        //     } else {
+        //         a = 1;
+        //     }
+        // }
+        // 
+        // sim_comp_list.data[0].a.value = a;
+        // sim_comp_list.data[1].a.value = b;
 
 
         SimCompList_eval_all(&sim_comp_list, eval_count / 50);

@@ -85,9 +85,9 @@ void SimComp_eval(SimComp* self, unsigned int eval_count) {
 
     self->eval_count++;
 
-    if (self->a.comp)
+    if (self->a.comp && self->a.comp->position.x > self->position.x)
         SimComp_eval(self->a.comp, eval_count);
-    if (self->b.comp)
+    if (self->b.comp && self->b.comp->position.x > self->position.x)
         SimComp_eval(self->b.comp, eval_count);
 
     if (self->children.count == 0)
