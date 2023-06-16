@@ -54,6 +54,7 @@ typedef struct {
 
 #define S_Conn(c, p) (SimOutConn) { .comp = (c), .pin = (p) }
 #define S_Comp(k) (SimComp) { .kind = (k), .a = {0}, .b = {0}, .children = {0}, .eval_count = 0 }
+#define SL_at(s, i) &((SimCompList*)s)->data[i - 1]
 
 const char* SimCompKind_text(SimCompKind self);
 

@@ -3,6 +3,8 @@
 
 #include "./editor.h"
 
+static size_t selected_comp_i = 0;
+
 static Vector2 a_pin_pos(Rectangle box_rect, bool is_binary, int gs) {
     int y_divisor = is_binary ? 3 : 2;
     return CLITERAL(Vector2) {
@@ -75,14 +77,26 @@ void Editor_draw_comp(SimComp* comp, GlobalState global_state) {
 }
 
 void Editor_interactions(SimCompList* comp_list, int gs) {
-    if (!IsMouseButtonDown(MOUSE_BUTTON_LEFT)) return;
-    for (size_t i = 0; i < comp_list->count; ++i) {
-        SimComp* comp = &comp_list->data[i];
+    if (selected_comp_i) {
+        SimComp* selected_comp = SL_at(comp_list, selected_comp_i);
+        Vector2 m_delta = GetMouseDelta();
+        selected_comp->position.x += m_delta.x;
+        selected_comp->position.y += m_delta.y;
+    }
+
+    if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+        return;
+
+    if (selected_comp_i) {
+        selected_comp_i = 0;
+        return;
+    }
+
+    for (size_t i = 1; i <= comp_list->count; ++i) {
+        SimComp* comp = SL_at(comp_list, i);
         Rectangle comp_rect = SimComp_get_rect(comp, gs);
         if (CheckCollisionPointRec(GetMousePosition(), comp_rect)) {
-            Vector2 m_delta = GetMouseDelta();
-            comp->position.x += m_delta.x;
-            comp->position.y += m_delta.y;
+            selected_comp_i = i;
             return;
         }
     }
