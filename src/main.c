@@ -44,9 +44,6 @@ int main(void) {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(global_state.screen_width, global_state.screen_height, "Nor2Doom");
 
-    bool a = 0;
-    bool b = 0;
-
     sim_comp_list.data[0].a.value = 1;
     SetTargetFPS(60);
     unsigned int eval_count = 0;
@@ -54,23 +51,8 @@ int main(void) {
         global_state.screen_width = GetScreenWidth();
         global_state.screen_height = GetScreenHeight();
 
-        // if (eval_count % 50 == 0) {
-        //     if (a) {
-        //         a = 0;
-        //         b = !b;
-        //     } else {
-        //         a = 1;
-        //     }
-        // }
-        // 
-        // sim_comp_list.data[0].a.value = a;
-        // sim_comp_list.data[1].a.value = b;
-
-
-        SimCompList_eval_all(&sim_comp_list, eval_count / 50);
-
         BeginDrawing();
-            Logic_Sim_draw(sim_comp_list, global_state);
+            Logic_Sim_update(&sim_comp_list, global_state, eval_count);
         EndDrawing();
 
         eval_count++;

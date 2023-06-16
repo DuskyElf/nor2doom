@@ -11,6 +11,7 @@
 
 void Editor_draw_conn(SimOutConn conn, Rectangle parent_rect, int gs);
 void Editor_draw_comp(SimComp* comp, GlobalState global_state);
+void Editor_interactions(SimCompList* comp_list, int gs);
 void Editor_draw_comps(SimCompList comps, GlobalState global_state);
 
 #endif // !_EDITOR_H

@@ -1,3 +1,4 @@
+#include <raylib.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -126,6 +127,15 @@ void SimComp_eval(SimComp* self, unsigned int eval_count) {
     }
 }
 
+Rectangle SimComp_get_rect(SimComp* self, int gs) {
+    return (CLITERAL(Rectangle) {
+        self->position.x,
+        self->position.y,
+        MeasureText(SimCompKind_text(self->kind), E_Lable_Size(gs)) + E_Padding(gs) * 2,
+        E_Lable_Size(gs) + E_Padding(gs) * 2,
+    });
+}
+
 bool SimCompKind_is_binary(const SimCompKind kind) {
     switch (kind) {
         case SC_BUFF:
@@ -196,8 +206,11 @@ void SimCompList_remove(SimCompList* self, size_t index) {
     --self->count;
 }
 
-void Logic_Sim_draw(SimCompList comp_list, GlobalState global_state) {
+void Logic_Sim_update(SimCompList* comp_list, GlobalState global_state, int eval_count) {
+    Editor_interactions(comp_list, global_state.gui_scale);
+    SimCompList_eval_all(comp_list, eval_count / 50);
     ClearBackground(MY_COLOR_1);
+    Editor_draw_comps(*comp_list, global_state);
     DrawText(
         "Logic Simulator",
         4 * global_state.gui_scale,
@@ -205,5 +218,4 @@ void Logic_Sim_draw(SimCompList comp_list, GlobalState global_state) {
         8 * global_state.gui_scale,
         MY_COLOR_2
     );
-    Editor_draw_comps(comp_list, global_state);
 }

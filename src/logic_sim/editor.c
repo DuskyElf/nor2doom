@@ -25,17 +25,8 @@ static Vector2 out_pin_pos(Rectangle box_rect, int gs) {
     };
 }
 
-static Rectangle get_rect(SimComp* comp, int gs) {
-    return CLITERAL(Rectangle) {
-        comp->position.x,
-        comp->position.y,
-        MeasureText(SimCompKind_text(comp->kind), E_Lable_Size(gs)) + E_Padding(gs) * 2,
-        E_Lable_Size(gs) + E_Padding(gs) * 2,
-    };
-}
-
 void Editor_draw_conn(SimOutConn conn, Rectangle parent_rect, int gs) {
-    Rectangle child_rect = get_rect(conn.comp, gs);
+    Rectangle child_rect = SimComp_get_rect(conn.comp, gs);
 
     bool conn_value;
     Vector2 in_pin_pos;
@@ -59,7 +50,7 @@ void Editor_draw_conn(SimOutConn conn, Rectangle parent_rect, int gs) {
 
 void Editor_draw_comp(SimComp* comp, GlobalState global_state) {
     const int gs = global_state.gui_scale;
-    Rectangle box_rect = get_rect(comp, gs);
+    Rectangle box_rect = SimComp_get_rect(comp, gs);
     const char* lable_text = SimCompKind_text(comp->kind);
 
     int lable_x = comp->position.x + E_Padding(gs);
@@ -80,6 +71,20 @@ void Editor_draw_comp(SimComp* comp, GlobalState global_state) {
 
     for (size_t i = 0; i < comp->children.count; ++i) {
         Editor_draw_conn(comp->children.data[i], box_rect, gs);
+    }
+}
+
+void Editor_interactions(SimCompList* comp_list, int gs) {
+    if (!IsMouseButtonDown(MOUSE_BUTTON_LEFT)) return;
+    for (size_t i = 0; i < comp_list->count; ++i) {
+        SimComp* comp = &comp_list->data[i];
+        Rectangle comp_rect = SimComp_get_rect(comp, gs);
+        if (CheckCollisionPointRec(GetMousePosition(), comp_rect)) {
+            Vector2 m_delta = GetMouseDelta();
+            comp->position.x += m_delta.x;
+            comp->position.y += m_delta.y;
+            return;
+        }
     }
 }
 

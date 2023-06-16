@@ -63,6 +63,7 @@ void SimOCA_remove(SimOutConnArray* self, size_t item_i);
 void SimComp_inject(SimComp* self, SimOutConn conn);
 void SimComp_eject(SimComp* self);
 void SimComp_eval(SimComp* self, unsigned int eval_count);
+Rectangle SimComp_get_rect(SimComp* self, int gs);
 
 bool SimCompKind_is_binary(const SimCompKind kind);
 
@@ -72,6 +73,6 @@ void SimCompList_add(SimCompList* self, SimComp item);
 void SimCompList_remove(SimCompList* self, size_t index);
 void SimCompList_eval_all(SimCompList* self, unsigned int eval_count);
 
-void Logic_Sim_draw(SimCompList comp_list, GlobalState global_state);
+void Logic_Sim_update(SimCompList* comp_list, GlobalState global_state, int eval_count);
 
 #endif // !_LOGIC_SIM_H
