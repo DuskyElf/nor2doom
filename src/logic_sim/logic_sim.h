@@ -6,6 +6,7 @@
 
 #include "../main.h"
 
+#define MAX_WIRES 8
 #define MAX_CHILDREN 8
 #define SIMCOMPLIST_INITIAL_SIZE 256
 
@@ -22,6 +23,11 @@ typedef enum {
 } SimCompPinKind;
 
 typedef struct {
+    Vector2 start;
+    Vector2 end;
+} Wire;
+
+typedef struct {
     struct SimComp* comp;
     SimCompPinKind pin;
 } SimOutConn;
@@ -30,6 +36,8 @@ typedef struct {
     bool value;
     struct SimComp* comp;
     size_t self_i;
+    size_t wire_count;
+    Wire wires[MAX_WIRES];
 } SimInConn;
 
 typedef struct {
@@ -61,10 +69,14 @@ const char* SimCompKind_text(SimCompKind self);
 size_t SimOCA_add(SimOutConnArray* self, SimOutConn conn);
 void SimOCA_remove(SimOutConnArray* self, size_t item_i);
 
-void SimComp_inject(SimComp* self, SimOutConn conn);
+void SimComp_inject(SimComp* self, SimOutConn conn, int gs);
 void SimComp_eject(SimComp* self);
 void SimComp_eval(SimComp* self, unsigned int eval_count);
+void SimComp_set_pos(SimComp* self, Vector2 pos, int gs);
 Rectangle SimComp_get_rect(SimComp* self, int gs);
+Vector2 SimComp_a_pin_pos(SimComp* self, int gs);
+Vector2 SimComp_b_pin_pos(SimComp* self, int gs);
+Vector2 SimComp_out_pin_pos(SimComp* self, int gs);
 
 bool SimCompKind_is_binary(const SimCompKind kind);
 

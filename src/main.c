@@ -9,6 +9,7 @@ int main(void) {
         .screen_height = 1080,
         .gui_scale = 10,
     };
+    int gs = global_state.gui_scale;
 
     SimCompList sim_comp_list = SimCompList_alloc();
     SimCompList_add(&sim_comp_list, S_Comp(SC_BUFF));
@@ -31,18 +32,18 @@ int main(void) {
     SimComp_inject(&sim_comp_list.data[6], S_Conn(&sim_comp_list.data[7], SC_IN_A));
     SimComp_inject(&sim_comp_list.data[7], S_Conn(&sim_comp_list.data[1], SC_IN_A));
 
-    sim_comp_list.data[0].position = CLITERAL(Vector2) { 300, 300 };
-    sim_comp_list.data[1].position = CLITERAL(Vector2) { 300, 500 };
-    sim_comp_list.data[2].position = CLITERAL(Vector2) { 550, 300 };
-    sim_comp_list.data[3].position = CLITERAL(Vector2) { 550, 500 };
-    sim_comp_list.data[4].position = CLITERAL(Vector2) { 800, 200 };
-    sim_comp_list.data[5].position = CLITERAL(Vector2) { 800, 600 };
-    sim_comp_list.data[6].position = CLITERAL(Vector2) { 1000, 400 };
-    sim_comp_list.data[7].position = CLITERAL(Vector2) { 1200, 400 };
-    //SimCompList_add(&sim_comp_list, S_Comp(SC_AND));
-
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(global_state.screen_width, global_state.screen_height, "Nor2Doom");
+
+    SimComp_set_pos(&sim_comp_list.data[0], CLITERAL(Vector2) { 300, 300 }, gs);
+    SimComp_set_pos(&sim_comp_list.data[1], CLITERAL(Vector2) { 300, 500 }, gs);
+    SimComp_set_pos(&sim_comp_list.data[2], CLITERAL(Vector2) { 550, 300 }, gs);
+    SimComp_set_pos(&sim_comp_list.data[3], CLITERAL(Vector2) { 550, 500 }, gs);
+    SimComp_set_pos(&sim_comp_list.data[4], CLITERAL(Vector2) { 800, 200 }, gs);
+    SimComp_set_pos(&sim_comp_list.data[5], CLITERAL(Vector2) { 800, 600 }, gs);
+    SimComp_set_pos(&sim_comp_list.data[6], CLITERAL(Vector2) { 1000, 400 }, gs);
+    SimComp_set_pos(&sim_comp_list.data[7], CLITERAL(Vector2) { 1200, 400 }, gs);
+    //SimCompList_add(&sim_comp_list, S_Comp(SC_AND));
 
     sim_comp_list.data[0].a.value = 1;
     SetTargetFPS(60);
