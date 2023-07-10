@@ -1,2 +1,7 @@
 /build
 nor2doom
+
+
+# Added by cargo
+
+/target
