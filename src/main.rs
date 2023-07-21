@@ -20,7 +20,7 @@ fn main() {
         global_state.screen_height = rh.get_screen_height() as u32;
 
         let mut canvas = rh.begin_drawing(&thread);
-        canvas.clear_background(Color::RAYWHITE);
+        canvas.clear_background(Color::BLACK);
         canvas.draw_fps(100, 100);
     }
 }

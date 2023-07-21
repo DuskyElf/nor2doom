@@ -178,9 +178,9 @@ impl SimComps {
 
         for i in 0..comp.out.len() {
             // let child = &mut comp.out[i];
-            let a = comp.out[i].comp_id;
+            let a = self.comps[comp_index].out[i].comp_id;
 
-            match comp.out[i].pin {
+            match self.comps[comp_index].out[i].pin {
                 Pin::A => self.comps[a].a.as_mut().unwrap()
                     .wires.last_mut().unwrap().end = out_pin_pos,
                 Pin::B => todo!(),
