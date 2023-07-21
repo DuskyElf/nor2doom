@@ -178,12 +178,13 @@ impl SimComps {
 
         for i in 0..comp.out.len() {
             // let child = &mut comp.out[i];
-            let a = self.comps[comp_index].out[i].comp_id;
+            let child_comp = self.comps[comp_index].out[i].comp_id;
 
             match self.comps[comp_index].out[i].pin {
-                Pin::A => self.comps[a].a.as_mut().unwrap()
+                Pin::A => self.comps[child_comp].a.as_mut().unwrap()
                     .wires.last_mut().unwrap().end = out_pin_pos,
-                Pin::B => todo!(),
+                Pin::B => self.comps[child_comp].b.as_mut().unwrap()
+                    .wires.last_mut().unwrap().end = out_pin_pos,
             }
         }
     }
