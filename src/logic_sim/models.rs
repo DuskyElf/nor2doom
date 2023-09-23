@@ -32,20 +32,18 @@ pub struct Wire {
     pub end: Vector2,
 }
 
-pub struct SimInConn {
+pub struct SimInConn<'a> {
     pub value: bool,
-    pub parent_id: usize,
-    pub my_index: usize,
+    pub source: Option<(&'a mut SimComp<'a>, usize)>, // own index in parent's out list
     pub wires: Vec<Wire>,
 }
 
-impl SimInConn {
-    pub fn new(parent_id: usize, my_index: usize, wires: Vec<Wire>) -> Self {
+impl SimInConn<'_> {
+    pub fn new() -> Self {
         Self {
             value: false,
-            parent_id,
-            my_index,
-            wires,
+            source: None,
+            wires: vec![],
         }
     }
 }
@@ -56,47 +54,48 @@ pub enum Pin {
     B,
 }
 
-#[derive(Clone, Copy)]
-pub struct SimOutConn {
-    pub comp_id: usize,
+pub struct SimOutConn<'a> {
+    pub comp: &'a mut SimComp<'a>,
     pub pin: Pin,
 }
 
-impl SimOutConn {
-    pub fn new(comp_id: usize, pin: Pin) -> Self {
+impl<'a> SimOutConn<'a> {
+    pub fn new(comp: &'a mut SimComp<'a>, pin: Pin) -> Self {
         Self {
-            comp_id, pin
-       }
+            comp,
+            pin
+        }
     }
 }
 
-pub struct SimComp {
+pub struct SimComp<'a> {
     pub position: Vector2,
     pub kind: SimCompKind,
-    pub a: Option<SimInConn>,
-    pub b: Option<SimInConn>,
-    pub out: Vec<SimOutConn>,
-    pub eval_count: usize,
+    pub a: SimInConn<'a>,
+    pub b: SimInConn<'a>,
+    pub out: Vec<SimOutConn<'a>>,
+    pub eval_count: usize,  // How many times it has been evaluated before
+                            // To sync all the components
 }
 
-impl SimComp {
+impl SimComp<'_> {
     pub fn new(kind: SimCompKind, position: Vector2) -> Self {
         Self {
             position,
             kind,
-            a: None,
-            b: None,
+            a: SimInConn::new(),
+            b: SimInConn::new(),
             out: vec![],
             eval_count: 0,
         }
     }
 }
 
-pub struct SimComps {
-    pub comps: Vec<SimComp>,
+pub struct LogicSim<'a> {
+    pub comps: Vec<SimComp<'a>>,
 }
 
-impl SimComps {
+impl LogicSim<'_> {
     pub fn new() -> Self {
         Self {
             comps: vec![],
